@@ -793,25 +793,15 @@ while(counter!= 2){
 #### **The Process**
 Objects in swift go through a 5 stage process after allocation.  The 5 steps are:
 
-&nbsp;&nbsp; -Allocation (memory taken from stack or heap)
+ -Allocation (memory taken from stack or heap)
+ 
+-Initialization (init code runs)
 
-&nbsp;&nbsp; -Initialization (init code runs)
+-Usage (the object is used)
 
-&nbsp;&nbsp; -Usage (the object is used)
+-Deinitialization (deinit code runs)
 
-&nbsp;&nbsp; -Deinitialization (deinit code runs)
-
-&nbsp;&nbsp; -Deallocation (memory returned to stack or heap)
-
-#### **The good**
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The advantages of the ARC cycle is the developer does not have to worry about memory leaks because as soon as something leaves its scope the reference count will be updated for the current scope of the program.  With this as soon as the reference counter hits 0 Swift will automatically deinitalize the object and return the memory back to the stack or heap.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Swift’s automatic reference counting allows for easy garbage collection because as soon as the reference count hits 0 it will be marked as garbage and the memory will be returned.
-
-#### **The Bad**
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The ARC cycle has issues when multithreading occurs and objects are shared across many threads. Deinitalizing objects from multiple threads introduces a whole lot of complexity since the references are split across many threads and the ARC cycle has trouble tracking and keeping up with the references as some are dereferenced at the same time.
+ -Deallocation (memory returned to stack or heap)
 
 # **Comparisons of references and values**
 
@@ -889,8 +879,7 @@ if (quotation == sameQuotation) {
 
 ## **Swift:**
 
-### Optional Chaining
-Optional chaining is a process for querying and calling properties, methods, and subscripts on an optional that might currently be *nil*. If the optional contains a value, the property, method, or subscript call succeeds; if the optional is *nil*, the property, method, or subscript call returns *nil*. Multiple queries can be chained together, and the entire chain fails gracefully if any link in the chain is *nil*.
+Swift has a feature called Optional chaining. Optional chaining is the process for querying and calling properties, methods, and subscripts on an optional that might currently be *nil*. If the optional contains a value, the property, method, or subscript call succeeds; if the optional is *nil*, the property, method, or subscript call returns *nil*. Multiple queries can be chained together, and the entire chain fails gracefully if any link in the chain is *nil*.
 
 To reflect the fact that optional chaining can be called on a nil value, the result of an optional chaining call is always an optional value, even if the property, method, or subscript you are querying returns a nonoptional value. You can use this optional return value to check whether the optional chaining call was successful (the returned optional contains a value), or did not succeed due to a nil value in the chain (the returned optional value is *nil*).
 
@@ -1513,31 +1502,6 @@ In Kotlin the term for multithreading is __coroutines__.  The difference of a co
 
 The idea behind implementing a suspension is when you have to block a thread it usually expensive and can cause a lot of stress in a high load operation.  When using a suspension the work load is almost free and does not stress the system.  They are easy to implement and their functionality can be user controlled by libraries. 
 
-##### **Example**
-
-```kotlin
-fun main(args: Array<String>) {
-    doSomething() // ERROR: Suspending function called from a non-coroutine context 
-    
-    async { 
-        ...
-        computations.forEach { // `forEach` is an inline function, the lambda is inlined
-            it.await() // OK
-        }
-            
-        thread { // `thread` is not an inline function, so the lambda is not inlined
-            doSomething() // ERROR
-        }
-    }
-}
-
-/// how a suspension function is declared
-suspend fun doSomething(foo: Foo): Bar {
-    ...
-}
-```
-
-Many API's implement suspension of coroutines for Kotlin allowing for easy implementation and all that is required is a slight tweaking to get the functionality you want out of the coroutine.
 
 
 
